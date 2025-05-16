@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FG Degree College for Men Peshawar Cantt</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="img/logo.png" type="image/png">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -53,120 +54,406 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero Section with Video Background -->
   <section class="hero">
+    <div class="video-container">
+      <img src="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg" alt="Campus Building" class="hero-bg-image">
+      <video autoplay muted loop id="hero-video">
+        <source src="videos/campus-video.mp4" type="video/mp4">
+        <!-- Fallback background image is set in CSS -->
+      </video>
+      <div class="video-overlay"></div>
+    </div>
     <div class="hero-content">
       <h2 class="fade-in">Excellence in Education</h2>
       <p class="fade-in delay-1">Shaping the future leaders of tomorrow</p>
       <div class="cta-container fade-in delay-2">
-        <a href="admission.html" class="cta-button">Apply Now</a>
-        <a href="about.html" class="cta-button secondary">Learn More</a>  
+        <a href="form.html" class="cta-button">Apply Now</a>
+        <a href="about.html" class="cta-button secondary">Learn More</a>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
+  <!-- Announcement Banner -->
+  <div class="announcement-banner">
+    <div class="container">
+      <div class="announcement-content">
+        <i class="fas fa-bullhorn"></i>
+        <div class="announcement-text">
+          <span class="announcement-label">Announcement:</span>
+          <span class="announcement-message">Admissions open for Fall 2025 semester. Last date to apply is August 15, 2025.</span>
+        </div>
+        <a href="form.html" class="announcement-btn">Apply Now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admission Section with Parallax -->
+  <section class="admission">
+    <div class="parallax-container">
+      <div class="container">
+        <div class="admission-content">
+          <div class="admission-text reveal-left">
+            <h2>Begin Your Journey With Us</h2>
+            <p>Join our prestigious institution and embark on a journey of academic excellence and personal growth.</p>
+            <ul class="admission-highlights">
+              <li><i class="fas fa-check-circle"></i> Simple application process</li>
+              <li><i class="fas fa-check-circle"></i> Merit-based admissions</li>
+              <li><i class="fas fa-check-circle"></i> Scholarships available</li>
+              <li><i class="fas fa-check-circle"></i> Modern facilities and resources</li>
+              <li><i class="fas fa-check-circle"></i> Experienced faculty members</li>
+            </ul>
+            <div class="admission-buttons">
+              <a href="form.html" class="cta-button">Apply Online</a>
+              <a href="admission.html" class="cta-button secondary">Learn More</a>
+            </div>
+          </div>
+          <div class="admission-image reveal-right">
+            <img src="https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg" alt="Student Life">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Campus Gallery Section -->
+  <section class="campus-gallery">
+    <div class="container">
+      <div class="section-header">
+        <h2>Campus Gallery</h2>
+        <div class="underline"></div>
+        <p>Explore our beautiful campus and facilities</p>
+      </div>
+      
+      <div class="gallery-container reveal">
+        <div class="gallery-item">
+          <img src="https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg" alt="Campus Building">
+          <div class="gallery-caption">Main Building</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.pexels.com/photos/159775/library-la-trobe-study-students-159775.jpeg" alt="Library">
+          <div class="gallery-caption">Modern Library</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.pexels.com/photos/267507/pexels-photo-267507.jpeg" alt="Computer Lab">
+          <div class="gallery-caption">Computer Lab</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg" alt="Science Lab">
+          <div class="gallery-caption">Science Laboratory</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg" alt="Sports Ground">
+          <div class="gallery-caption">Sports Facilities</div>
+        </div>
+        <div class="gallery-item">
+          <img src="https://images.pexels.com/photos/1708936/pexels-photo-1708936.jpeg" alt="Auditorium">
+          <div class="gallery-caption">Auditorium</div>
+        </div>
+      </div>
+      
+      <div class="gallery-nav">
+        <button class="gallery-prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="gallery-next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section with Interactive Tabs -->
+  <section class="programs">
+    <div class="container">
+      <div class="section-header">
+        <h2>Academic Programs</h2>
+        <div class="underline"></div>
+        <p>Discover our diverse range of academic programs designed to prepare you for success</p>
+      </div>
+      
+      <div class="programs-tabs">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="intermediate">Intermediate</button>
+          <button class="tab-btn" data-tab="bs">BS Programs</button>
+        </div>
+        
+        <div class="tab-content active" id="intermediate">
+          <div class="program-cards">
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/2280549/pexels-photo-2280549.jpeg" alt="Pre-Medical">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-flask"></i>
+              </div>
+              <h4>Pre-Medical</h4>
+              <p>Prepare for medical and allied health sciences with a strong foundation in Biology, Chemistry, and Physics.</p>
+            </div>
+            
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/3862130/pexels-photo-3862130.jpeg" alt="Pre-Engineering">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-cogs"></i>
+              </div>
+              <h4>Pre-Engineering</h4>
+              <p>Build a solid foundation for engineering disciplines with Mathematics, Physics, and Chemistry.</p>
+            </div>
+            
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg" alt="Computer Science">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-laptop-code"></i>
+              </div>
+              <h4>Computer Science</h4>
+              <p>Develop computational thinking and programming skills with Computer Science, Mathematics, and Physics.</p>
+            </div>
+            
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/256431/pexels-photo-256431.jpeg" alt="Arts">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-book"></i>
+              </div>
+              <h4>Arts</h4>
+              <p>Explore humanities and social sciences with a flexible combination of subjects.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" id="bs">
+          <div class="program-cards">
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg" alt="Computer Science and IT">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-laptop-code"></i>
+              </div>
+              <h4>Computer Science and IT</h4>
+              <p>Four-year degree program covering programming, algorithms, databases, networking, and software engineering.</p>
+            </div>
+            
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/6077326/pexels-photo-6077326.jpeg" alt="Political Science">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-balance-scale"></i>
+              </div>
+              <h4>Political Science</h4>
+              <p>Study of political systems, governance, international relations, and public policy.</p>
+            </div>
+            
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/186461/pexels-photo-186461.jpeg" alt="Economics">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h4>Economics</h4>
+              <p>Analysis of production, distribution, and consumption of goods and services at micro and macro levels.</p>
+            </div>
+            
+            <div class="program-card">
+              <div class="program-image">
+                <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg" alt="BBA">
+              </div>
+              <div class="program-icon">
+                <i class="fas fa-briefcase"></i>
+              </div>
+              <h4>BBA (Hons)</h4>
+              <p>Comprehensive business administration program covering management, marketing, finance, and entrepreneurship.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="program-cta reveal">
+        <a href="form.html" class="cta-button">Apply for Admission</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Showcase Section -->
+  <section class="video-showcase">
+    <div class="container">
+      <div class="section-header light">
+        <h2>Experience Our Campus</h2>
+        <div class="underline"></div>
+        <p>Take a virtual tour of our state-of-the-art facilities and vibrant campus life</p>
+      </div>
+      
+      <div class="video-wrapper reveal">
+        <iframe src="https://www.youtube.com/embed/sample-video-id" title="Campus Tour" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section with Images -->
   <section class="features">
     <div class="container">
       <div class="section-header">
         <h2>Why Choose Us</h2>
         <div class="underline"></div>
+        <p>Discover what sets us apart and makes us the ideal choice for your education</p>
       </div>
       
       <div class="features-grid">
         <div class="feature-card reveal">
-          <div class="feature-icon">
-            <i class="fas fa-graduation-cap"></i>
+          <div class="feature-image">
+            <img src="https://images.pexels.com/photos/5212345/pexels-photo-5212345.jpeg" alt="Academic Excellence">
           </div>
-          <h3>Academic Excellence</h3>
-          <p>Committed to providing quality education with experienced faculty and modern teaching methodologies.</p>
+          <div class="feature-content">
+            <div class="feature-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3>Academic Excellence</h3>
+            <p>Committed to providing quality education with experienced faculty and modern teaching methodologies.</p>
+          </div>
         </div>
         
         <div class="feature-card reveal" data-delay="100">
-          <div class="feature-icon">
-            <i class="fas fa-book"></i>
+          <div class="feature-image">
+            <img src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg" alt="Diverse Programs">
           </div>
-          <h3>Diverse Programs</h3>
-          <p>Offering a wide range of programs at Intermediate and BS levels to cater to various academic interests.</p>
+          <div class="feature-content">
+            <div class="feature-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>Diverse Programs</h3>
+            <p>Offering a wide range of programs at Intermediate and BS levels to cater to various academic interests.</p>
+          </div>
         </div>
         
         <div class="feature-card reveal" data-delay="200">
-          <div class="feature-icon">
-            <i class="fas fa-users"></i>
+          <div class="feature-image">
+            <img src="https://images.pexels.com/photos/7096/people-woman-coffee-meeting.jpg" alt="Supportive Environment">
           </div>
-          <h3>Supportive Environment</h3>
-          <p>Creating a nurturing atmosphere that encourages personal growth and academic achievement.</p>
+          <div class="feature-content">
+            <div class="feature-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Supportive Environment</h3>
+            <p>Creating a nurturing atmosphere that encourages personal growth and academic achievement.</p>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Programs Section -->
-  <section class="programs">
+  <!-- Testimonials Section -->
+  <section class="testimonials">
     <div class="container">
       <div class="section-header">
-        <h2>Our Programs</h2>
+        <h2>What Our Students Say</h2>
         <div class="underline"></div>
+        <p>Hear from our students about their experiences at FG Degree College</p>
       </div>
       
-      <div class="programs-container">
-        <div class="program-category reveal-left">
-          <h3>Intermediate Level</h3>
-          <ul class="program-list">
-            <li>Pre-Medical</li>
-            <li>Pre-Engineering</li>
-            <li>Computer Science</li>
-            <li>Arts</li>
-            <li>Arts State</li>
-          </ul>
+      <div class="testimonials-slider reveal">
+        <div class="testimonial-slide active">
+          <div class="testimonial-content">
+            <div class="testimonial-image">
+              <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="Student Testimonial">
+            </div>
+            <div class="testimonial-text">
+              <p>"The faculty at FG Degree College is exceptional. They not only focus on academic excellence but also on character building. My time here has been transformative."</p>
+              <div class="testimonial-author">
+                <h4>Ahmad Khan</h4>
+                <p>BS Computer Science, 2024</p>
+              </div>
+            </div>
+          </div>
         </div>
         
-        <div class="program-category reveal-right">
-          <h3>BS Programs</h3>
-          <ul class="program-list">
-            <li>Computer Science and IT</li>
-            <li>Political Science</li>
-            <li>Economics</li>
-            <li>BBA (Hons)</li>
-          </ul>
+        <div class="testimonial-slide">
+          <div class="testimonial-content">
+            <div class="testimonial-image">
+              <img src="https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg" alt="Student Testimonial">
+            </div>
+            <div class="testimonial-text">
+              <p>"The supportive environment and quality education at FG Degree College prepared me well for my future. I'm grateful for the opportunities I received here."</p>
+              <div class="testimonial-author">
+                <h4>Muhammad Ali</h4>
+                <p>BS Economics, 2023</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div class="program-cta reveal">
-        <a href="admission.html" class="cta-button">Apply for Admission</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Admission Section -->
-  <section class="admission">
-    <div class="container">
-      <div class="admission-content">
-        <div class="admission-text reveal-left">
-          <h2>Admissions Open</h2>
-          <p>Join our prestigious institution and embark on a journey of academic excellence and personal growth.</p>
-          <ul class="admission-highlights">
-            <li><i class="fas fa-check-circle"></i> Simple application process</li>
-            <li><i class="fas fa-check-circle"></i> Merit-based admissions</li>
-            <li><i class="fas fa-check-circle"></i> Scholarships available</li>
-          </ul>
-          <a href="admission.html" class="cta-button">Apply Online</a>
-        </div>
-        <div class="admission-image reveal-right">
-          <div class="image-container">
-            <div class="image-overlay"></div>
+        
+        <div class="testimonial-slide">
+          <div class="testimonial-content">
+            <div class="testimonial-image">
+              <img src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg" alt="Student Testimonial">
+            </div>
+            <div class="testimonial-text">
+              <p>"The college provided me with not just academic knowledge but also practical skills that have been invaluable in my professional career."</p>
+              <div class="testimonial-author">
+                <h4>Usman Ghani</h4>
+                <p>BBA (Hons), 2022</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      
+      <div class="testimonial-dots">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+      </div>
     </div>
   </section>
 
-  <!-- Quick Links Section -->
+  <!-- Stats Counter Section -->
+  <section class="stats-counter">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item reveal">
+          <div class="stat-icon">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <div class="stat-number" data-count="5000">0</div>
+          <div class="stat-label">Alumni</div>
+        </div>
+        
+        <div class="stat-item reveal" data-delay="100">
+          <div class="stat-icon">
+            <i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="stat-number" data-count="50">0</div>
+          <div class="stat-label">Faculty Members</div>
+        </div>
+        
+        <div class="stat-item reveal" data-delay="200">
+          <div class="stat-icon">
+            <i class="fas fa-book-open"></i>
+          </div>
+          <div class="stat-number" data-count="8">0</div>
+          <div class="stat-label">Programs Offered</div>
+        </div>
+        
+        <div class="stat-item reveal" data-delay="300">
+          <div class="stat-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="stat-number" data-count="60">0</div>
+          <div class="stat-label">Years of Excellence</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links Section with Icons -->
   <section class="quick-links">
     <div class="container">
       <div class="section-header">
         <h2>Quick Access</h2>
         <div class="underline"></div>
+        <p>Find what you're looking for with these quick links</p>
       </div>
       
       <div class="quick-links-grid">
@@ -189,6 +476,13 @@
             <i class="fas fa-clipboard-list"></i>
           </div>
           <h3>Admission Criteria</h3>
+        </a>
+        
+        <a href="faculty.html" class="quick-link-card reveal" data-delay="300">
+          <div class="quick-link-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Our Faculty</h3>
         </a>
       </div>
     </div>
@@ -240,5 +534,6 @@
   <!-- Scripts -->
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>

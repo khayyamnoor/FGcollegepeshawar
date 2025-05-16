@@ -369,3 +369,15 @@
     width: 100%;
   }
 }
+
+/* Add styles for the application CTA button */
+
+.application-cta {
+  text-align: center;
+  margin: var(--spacing-xl) 0;
+}
+
+.application-cta .cta-button {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+}

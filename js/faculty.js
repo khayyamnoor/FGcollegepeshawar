@@ -26,19 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
-  // Faculty card hover effect
-  const facultyCardInners = document.querySelectorAll(".faculty-card-inner")
-
-  facultyCardInners.forEach((card) => {
-    card.addEventListener("mouseenter", function () {
-      this.style.transform = "rotateY(180deg)"
-    })
-
-    card.addEventListener("mouseleave", function () {
-      this.style.transform = "rotateY(0)"
-    })
-  })
-
   // Staggered animation for faculty cards
   function animateFacultyCards() {
     facultyCards.forEach((card, index) => {

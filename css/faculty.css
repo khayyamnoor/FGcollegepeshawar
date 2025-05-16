@@ -55,48 +55,44 @@
 /* Faculty Grid */
 .faculty-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--spacing-lg);
 }
 
 .faculty-card {
-  perspective: 1000px;
-  height: 280px;
-}
-
-.faculty-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: left;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  box-shadow: var(--shadow-md);
+  background-color: var(--bg-light);
   border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  overflow: hidden;
+  position: relative;
 }
 
-.faculty-card:hover .faculty-card-inner {
-  transform: rotateY(180deg);
+.faculty-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.faculty-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--accent-color);
 }
 
 .faculty-info {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: var(--radius-md);
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  color: var(--text-light);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .faculty-info h3 {
+  color: var(--primary-color);
   font-size: 1.3rem;
-  color: var(--accent-color);
   margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: var(--spacing-sm);
 }
 
 .faculty-discipline,
@@ -111,7 +107,10 @@
 .faculty-subject strong,
 .faculty-designation strong,
 .faculty-qualification strong {
-  color: var(--accent-color);
+  color: var(--primary-color);
+  font-weight: 600;
+  display: inline-block;
+  width: 100px;
 }
 
 /* Hide faculty cards based on filter */
@@ -122,7 +121,7 @@
 /* Media Queries */
 @media (max-width: 992px) {
   .faculty-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
 
@@ -142,31 +141,15 @@
   .faculty-grid {
     grid-template-columns: 1fr;
   }
-}
 
-/* Faculty Image Styles */
-.faculty-image {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transform: rotateY(180deg);
-  background-color: #f5f5f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .faculty-info h3 {
+    font-size: 1.2rem;
+  }
 
-.faculty-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Adjust the info side to be properly positioned */
-.faculty-info {
-  backface-visibility: hidden;
-  transform: rotateY(0deg);
+  .faculty-discipline strong,
+  .faculty-subject strong,
+  .faculty-designation strong,
+  .faculty-qualification strong {
+    width: 90px;
+  }
 }
