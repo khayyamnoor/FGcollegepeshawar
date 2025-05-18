@@ -496,5 +496,80 @@
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/admission.js"></script>
+  <script>
+  document.getElementById("admissionForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const data = {
+      // Personal Details
+      fullName: form.fullName.value,
+      fatherName: form.fatherName.value,
+      dob: form.dob.value,
+      gender: form.gender.value,
+      cnic: form.cnic.value,
+      nationality: form.nationality.value,
+      religion: form.religion.value,
+      domicile: form.domicile.value,
+
+      // Contact Info
+      address: form.address.value,
+      phone: form.phone.value,
+      email: form.email.value,
+      guardianPhone: form.guardianPhone.value,
+      emergencyContact: form.emergencyContact.value,
+
+      // Matric Details
+      matricBoard: form.matricBoard.value,
+      matricYear: form.matricYear.value,
+      matricRollNo: form.matricRollNo.value,
+      matricInstitute: form.matricInstitute.value,
+      matricTotal: form.matricTotal.value,
+      matricObtained: form.matricObtained.value,
+      matricPercentage: form.matricPercentage.value,
+
+      // Inter Details
+      interBoard: form.interBoard.value,
+      interYear: form.interYear.value,
+      interRollNo: form.interRollNo.value,
+      interInstitute: form.interInstitute.value,
+      interTotal: form.interTotal.value,
+      interObtained: form.interObtained.value,
+      interPercentage: form.interPercentage.value,
+
+      // Program Info
+      programLevel: form.programLevel.value,
+      programChoice: form.programChoice.value,
+      programReason: form.programReason.value,
+
+      // Additional Info
+      bloodGroup: form.bloodGroup.value,
+      hafizQuran: form.hafizQuran.value,
+      disability: form.disability.value,
+      medicalCondition: form.medicalCondition.value,
+
+      // Declaration
+      declaration: form.declaration.checked ? "Yes" : "No"
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbz9j7c110x8BVgIhprfWfwCXW_KavM4PJxx7kCmWEX0rSH6bYkOmxu6VeHmMDjmrn1a/exec", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.text())
+    .then(result => {
+      alert("Application submitted successfully!");
+      form.reset();
+    })
+    .catch(error => {
+      console.error("Submission failed", error);
+      alert("Submission failed. Please try again.");
+    });
+  });
+</script>
+
 </body>
 </html>
