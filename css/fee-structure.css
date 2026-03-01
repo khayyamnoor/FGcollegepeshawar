@@ -175,6 +175,49 @@
   transition: color var(--transition-normal);
 }
 
+/* Program Group Title (UOP sub-sections) */
+.program-group-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--accent-color);
+}
+
+/* Unavailable Voucher Card */
+.voucher-card.unavailable {
+  border: 2px solid #e53e3e;
+  cursor: not-allowed;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.voucher-card.unavailable .voucher-icon {
+  color: #e53e3e;
+}
+
+.voucher-card.unavailable h4 {
+  color: #e53e3e;
+}
+
+.voucher-card.unavailable::before {
+  background-color: #e53e3e;
+  transform: scaleX(1);
+}
+
+.unavailable-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #e53e3e;
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 /* Media Queries */
 @media (max-width: 992px) {
   .tab-buttons {
