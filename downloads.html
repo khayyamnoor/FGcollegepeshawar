@@ -183,11 +183,14 @@
     // Apply Supabase download overrides on page load
     (async () => {
       try {
-        const { data } = await _supabase.from('downloads').select('slot_key, storage_path')
+        const { data } = await _supabase.from('downloads').select('slot_key, storage_path, updated_at')
         if (!data || !data.length) return
-        data.forEach(({ slot_key, storage_path }) => {
+        data.forEach(({ slot_key, storage_path, updated_at }) => {
           const card = document.querySelector(`[data-slot="${slot_key}"]`)
-          if (card) card.href = `${SUPABASE_URL}/storage/v1/object/public/downloads/${storage_path}`
+          if (card) {
+            const ts = updated_at ? new Date(updated_at).getTime() : Date.now()
+            card.href = `${SUPABASE_URL}/storage/v1/object/public/downloads/${storage_path}?t=${ts}`
+          }
         })
       } catch (_) {}
     })()

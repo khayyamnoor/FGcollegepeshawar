@@ -104,10 +104,12 @@ const FACULTY_SEED = [
 ]
 
 // ─── State ────────────────────────────────────────────────────────────────────
-let allApps = []
+let allApps  = []
+let allMsgs  = []
 let currentAppId = null
-let feeOverrides = {}   // slot_key → storage_path
-let dlOverrides  = {}   // slot_key → storage_path
+let currentMsgId = null
+let feeOverrides = {}   // slot_key → { path, ts }
+let dlOverrides  = {}   // slot_key → { path, ts }
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
 async function doLogin() {
@@ -175,6 +177,7 @@ function initDashboard() {
   loadFeeOverrides()
   loadFaculty()
   loadApplications()
+  loadMessages()
 }
 
 // ─── Toast ────────────────────────────────────────────────────────────────────
@@ -195,9 +198,11 @@ function storageUrl(bucket, path) {
 // FEE VOUCHERS
 // ══════════════════════════════════════════════════════════════════════════════
 async function loadFeeOverrides() {
-  const { data } = await sb.from('fee_vouchers').select('slot_key, storage_path')
+  const { data } = await sb.from('fee_vouchers').select('slot_key, storage_path, updated_at')
   feeOverrides = {}
-  if (data) data.forEach(r => { feeOverrides[r.slot_key] = r.storage_path })
+  if (data) data.forEach(r => {
+    feeOverrides[r.slot_key] = { path: r.storage_path, ts: new Date(r.updated_at).getTime() }
+  })
   renderFeeSlots()
 }
 
@@ -220,12 +225,13 @@ function renderFeeSlots() {
 }
 
 function slotCardHTML({ key, label }, bucket) {
-  const hasOverride = !!feeOverrides[key]
+  const override   = feeOverrides[key]
+  const hasOverride = !!override
   const statusHtml  = hasOverride
     ? `<span class="status-supabase"><i class="fas fa-check-circle"></i> Uploaded to Supabase</span>`
     : `<span class="status-local"><i class="fas fa-hdd"></i> Using local file</span>`
 
-  const viewUrl = hasOverride ? storageUrl(bucket, feeOverrides[key]) : ''
+  const viewUrl = hasOverride ? `${storageUrl(bucket, override.path)}?t=${override.ts}` : ''
   const viewBtn = hasOverride
     ? `<a class="btn btn-outline btn-sm" href="${viewUrl}" target="_blank"><i class="fas fa-eye"></i> View</a>`
     : ''
@@ -262,7 +268,7 @@ async function uploadFeeVoucher(key, input) {
 
   if (dbErr) { toast(`DB update failed: ${dbErr.message}`, 'error'); await loadFeeOverrides(); return }
 
-  feeOverrides[key] = path
+  feeOverrides[key] = { path, ts: Date.now() }
   toast(`"${key}" uploaded successfully!`)
   await loadFeeOverrides()
 }
@@ -271,20 +277,23 @@ async function uploadFeeVoucher(key, input) {
 // DOWNLOADS
 // ══════════════════════════════════════════════════════════════════════════════
 async function loadDownloadSlots() {
-  const { data } = await sb.from('downloads').select('slot_key, storage_path')
+  const { data } = await sb.from('downloads').select('slot_key, storage_path, updated_at')
   dlOverrides = {}
-  if (data) data.forEach(r => { dlOverrides[r.slot_key] = r.storage_path })
+  if (data) data.forEach(r => {
+    dlOverrides[r.slot_key] = { path: r.storage_path, ts: new Date(r.updated_at).getTime() }
+  })
   renderDownloadSlots()
 }
 
 function renderDownloadSlots() {
   const el = document.getElementById('slots-downloads')
   el.innerHTML = DOWNLOAD_SLOTS.map(s => {
-    const hasOverride = !!dlOverrides[s.key]
+    const override    = dlOverrides[s.key]
+    const hasOverride = !!override
     const statusHtml  = hasOverride
       ? `<span class="status-supabase"><i class="fas fa-check-circle"></i> Uploaded to Supabase</span>`
       : `<span class="status-local"><i class="fas fa-hdd"></i> Using local file</span>`
-    const viewUrl = hasOverride ? storageUrl('downloads', dlOverrides[s.key]) : ''
+    const viewUrl = hasOverride ? `${storageUrl('downloads', override.path)}?t=${override.ts}` : ''
     const viewBtn = hasOverride
       ? `<a class="btn btn-outline btn-sm" href="${viewUrl}" target="_blank"><i class="fas fa-eye"></i> View</a>`
       : ''
@@ -323,7 +332,7 @@ async function uploadDownload(key, label, desc, input) {
   )
   if (dbErr) { toast(`DB update failed: ${dbErr.message}`, 'error'); await loadDownloadSlots(); return }
 
-  dlOverrides[key] = path
+  dlOverrides[key] = { path, ts: Date.now() }
   toast(`"${label}" uploaded successfully!`)
   await loadDownloadSlots()
 }
@@ -615,4 +624,112 @@ function exportCSV() {
 document.addEventListener('click', e => {
   if (e.target.id === 'faculty-modal') closeFacultyModal()
   if (e.target.id === 'app-modal')     closeAppModal()
+  if (e.target.id === 'msg-modal')     closeMsgModal()
 })
+
+// ══════════════════════════════════════════════════════════════════════════════
+// CONTACT MESSAGES
+// ══════════════════════════════════════════════════════════════════════════════
+async function loadMessages() {
+  const tbody = document.getElementById('msgs-tbody')
+  const { data, error } = await sb.from('contact_messages')
+    .select('*').order('submitted_at', { ascending: false })
+
+  if (error) {
+    tbody.innerHTML = `<tr><td colspan="7" style="color:red;padding:20px;">Error: ${error.message}</td></tr>`
+    return
+  }
+
+  allMsgs = data || []
+  renderMessages(allMsgs)
+  updateUnreadBadge()
+}
+
+function renderMessages(msgs) {
+  const tbody   = document.getElementById('msgs-tbody')
+  const countEl = document.getElementById('msg-count')
+  countEl.textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''}`
+
+  if (msgs.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7">
+      <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <h3>No messages yet</h3>
+        <p>Messages from the Contact Us page will appear here.</p>
+      </div>
+    </td></tr>`
+    return
+  }
+
+  tbody.innerHTML = msgs.map((m, i) => `
+    <tr style="cursor:pointer;${!m.is_read ? 'font-weight:600;' : ''}" onclick="openMsgModal('${m.id}')">
+      <td>${i + 1}</td>
+      <td>${m.name || '—'}</td>
+      <td>${m.email || '—'}</td>
+      <td>${m.subject || '—'}</td>
+      <td>${m.submitted_at ? new Date(m.submitted_at).toLocaleDateString('en-PK') : '—'}</td>
+      <td><span class="badge ${m.is_read ? 'badge-lecturer' : 'badge-professor'}">${m.is_read ? 'Read' : 'Unread'}</span></td>
+      <td><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openMsgModal('${m.id}')"><i class="fas fa-eye"></i></button></td>
+    </tr>`).join('')
+}
+
+function filterMessages() {
+  const q = document.getElementById('msg-search').value.toLowerCase()
+  renderMessages(allMsgs.filter(m =>
+    [m.name, m.email, m.subject, m.message].some(v => v && v.toLowerCase().includes(q))
+  ))
+}
+
+async function openMsgModal(id) {
+  const m = allMsgs.find(x => x.id === id)
+  if (!m) return
+  currentMsgId = id
+
+  document.getElementById('msg-modal-body').innerHTML = `
+    <div class="app-detail-section">
+      <div class="app-detail-grid">
+        ${field('From', m.name)} ${field('Email', m.email)}
+        ${field('Subject', m.subject)} ${field('Received', m.submitted_at ? new Date(m.submitted_at).toLocaleString('en-PK') : '—')}
+        ${field('Message', m.message, true)}
+      </div>
+    </div>`
+
+  document.getElementById('msg-modal').classList.add('open')
+
+  // Mark as read if not already
+  if (!m.is_read) {
+    await sb.from('contact_messages').update({ is_read: true }).eq('id', id)
+    m.is_read = true
+    renderMessages(allMsgs)
+    updateUnreadBadge()
+  }
+}
+
+function closeMsgModal() {
+  document.getElementById('msg-modal').classList.remove('open')
+  currentMsgId = null
+}
+
+async function deleteMsg() {
+  if (!currentMsgId) return
+  const m = allMsgs.find(x => x.id === currentMsgId)
+  if (!confirm(`Delete message from "${m?.name}"? This cannot be undone.`)) return
+
+  const { error } = await sb.from('contact_messages').delete().eq('id', currentMsgId)
+  if (error) { toast(`Delete failed: ${error.message}`, 'error'); return }
+
+  toast('Message deleted.')
+  closeMsgModal()
+  loadMessages()
+}
+
+function updateUnreadBadge() {
+  const unread = allMsgs.filter(m => !m.is_read).length
+  const badge  = document.getElementById('unread-badge')
+  if (unread > 0) {
+    badge.textContent     = unread
+    badge.style.display   = 'inline-block'
+  } else {
+    badge.style.display   = 'none'
+  }
+}

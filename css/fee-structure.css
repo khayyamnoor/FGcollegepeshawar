@@ -187,23 +187,9 @@
 
 /* Unavailable Voucher Card */
 .voucher-card.unavailable {
-  border: 2px solid #e53e3e;
   cursor: not-allowed;
   opacity: 0.75;
   pointer-events: none;
-}
-
-.voucher-card.unavailable .voucher-icon {
-  color: #e53e3e;
-}
-
-.voucher-card.unavailable h4 {
-  color: #e53e3e;
-}
-
-.voucher-card.unavailable::before {
-  background-color: #e53e3e;
-  transform: scaleX(1);
 }
 
 .unavailable-badge {

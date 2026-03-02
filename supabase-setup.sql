@@ -68,7 +68,18 @@ CREATE TABLE IF NOT EXISTS fee_vouchers (
   updated_at   timestamptz DEFAULT now()
 );
 
--- 4. DOWNLOAD FILE OVERRIDES TABLE
+-- 4. CONTACT MESSAGES TABLE
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id           uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  submitted_at timestamptz DEFAULT now(),
+  name         text NOT NULL,
+  email        text NOT NULL,
+  subject      text,
+  message      text NOT NULL,
+  is_read      boolean DEFAULT false
+);
+
+-- 5. DOWNLOAD FILE OVERRIDES TABLE
 CREATE TABLE IF NOT EXISTS downloads (
   id           uuid DEFAULT gen_random_uuid() PRIMARY KEY,
   slot_key     text UNIQUE NOT NULL,
@@ -80,20 +91,34 @@ CREATE TABLE IF NOT EXISTS downloads (
 
 -- ─── ROW LEVEL SECURITY ──────────────────────────────────────────────────────
 
-ALTER TABLE admissions  ENABLE ROW LEVEL SECURITY;
-ALTER TABLE faculty     ENABLE ROW LEVEL SECURITY;
-ALTER TABLE fee_vouchers ENABLE ROW LEVEL SECURITY;
-ALTER TABLE downloads   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE admissions       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE faculty          ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fee_vouchers     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE downloads        ENABLE ROW LEVEL SECURITY;
 
 -- admissions: anyone can INSERT, only authenticated admin can SELECT/DELETE
 CREATE POLICY "public_insert_admissions"
-  ON admissions FOR INSERT WITH CHECK (true);
+  ON admissions FOR INSERT TO anon WITH CHECK (true);
 
 CREATE POLICY "admin_read_admissions"
   ON admissions FOR SELECT USING (auth.role() = 'authenticated');
 
 CREATE POLICY "admin_delete_admissions"
   ON admissions FOR DELETE USING (auth.role() = 'authenticated');
+
+-- contact_messages: anyone can INSERT, only authenticated admin can SELECT/DELETE/UPDATE
+CREATE POLICY "public_insert_contact"
+  ON contact_messages FOR INSERT TO anon WITH CHECK (true);
+
+CREATE POLICY "admin_read_contact"
+  ON contact_messages FOR SELECT USING (auth.role() = 'authenticated');
+
+CREATE POLICY "admin_update_contact"
+  ON contact_messages FOR UPDATE USING (auth.role() = 'authenticated');
+
+CREATE POLICY "admin_delete_contact"
+  ON contact_messages FOR DELETE USING (auth.role() = 'authenticated');
 
 -- faculty: anyone can SELECT, authenticated admin can do everything
 CREATE POLICY "public_read_faculty"

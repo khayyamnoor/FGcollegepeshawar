@@ -307,3 +307,16 @@ tbody tr:hover { background: #f7f9fc; }
   table { font-size: 0.8rem; }
   .modal { max-width: 100%; margin: 0; border-radius: 12px 12px 0 0; align-self: flex-end; }
 }
+
+
+/* ── Unread badge on Messages tab ── */
+.unread-badge {
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 4px;
+  vertical-align: middle;
+}

@@ -3,14 +3,15 @@
 // Cards without an override keep their original local file path.
 async function applyFeeOverrides() {
   try {
-    const { data } = await _supabase.from('fee_vouchers').select('slot_key, storage_path')
+    const { data } = await _supabase.from('fee_vouchers').select('slot_key, storage_path, updated_at')
     if (!data || data.length === 0) return
 
-    data.forEach(({ slot_key, storage_path }) => {
+    data.forEach(({ slot_key, storage_path, updated_at }) => {
       const card = document.querySelector(`[data-slot="${slot_key}"]`)
       if (!card) return
 
-      const url = `${SUPABASE_URL}/storage/v1/object/public/fee-vouchers/${storage_path}`
+      const ts  = updated_at ? new Date(updated_at).getTime() : Date.now()
+      const url = `${SUPABASE_URL}/storage/v1/object/public/fee-vouchers/${storage_path}?t=${ts}`
 
       if (card.tagName === 'A') {
         card.href = url
