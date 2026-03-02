@@ -1,0 +1,309 @@
+/* ─── Admin Panel Styles ───────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary:   #1a3a5c;
+  --accent:    #c8a951;
+  --danger:    #e53e3e;
+  --success:   #38a169;
+  --bg:        #f4f6f9;
+  --white:     #ffffff;
+  --border:    #dde3ec;
+  --text:      #2d3748;
+  --muted:     #718096;
+  --radius:    8px;
+  --shadow:    0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.14);
+}
+
+body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── Login Screen ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary) 0%, #2c5282 100%);
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.login-card img { width: 80px; margin-bottom: 16px; }
+.login-card h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: 4px; }
+.login-card p  { color: var(--muted); font-size: 0.875rem; margin-bottom: 32px; }
+
+.login-card .form-group { text-align: left; margin-bottom: 18px; }
+.login-card label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.login-card input {
+  width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+  border-radius: var(--radius); font-size: 0.9rem; transition: border-color .2s;
+}
+.login-card input:focus { outline: none; border-color: var(--primary); }
+
+.login-btn {
+  width: 100%; padding: 12px; background: var(--primary); color: var(--white);
+  border: none; border-radius: var(--radius); font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: background .2s; margin-top: 8px;
+}
+.login-btn:hover { background: #2c5282; }
+.login-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+#login-error {
+  background: #fff5f5; color: var(--danger); border: 1px solid #fed7d7;
+  border-radius: var(--radius); padding: 10px 14px; font-size: 0.85rem;
+  margin-bottom: 16px; display: none;
+}
+
+/* ── Dashboard Shell ── */
+#dashboard { display: none; min-height: 100vh; }
+
+.admin-header {
+  background: var(--primary); color: var(--white);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.admin-header-left { display: flex; align-items: center; gap: 14px; }
+.admin-header-left img { width: 40px; }
+.admin-header-left h1 { font-size: 1.1rem; font-weight: 600; }
+.admin-header-left span { font-size: 0.75rem; color: rgba(255,255,255,0.65); display: block; }
+
+.logout-btn {
+  background: rgba(255,255,255,0.12); color: var(--white); border: 1px solid rgba(255,255,255,0.25);
+  border-radius: var(--radius); padding: 8px 18px; cursor: pointer; font-size: 0.875rem;
+  transition: background .2s;
+}
+.logout-btn:hover { background: rgba(255,255,255,0.22); }
+
+/* ── Dashboard Tabs ── */
+.dash-tabs {
+  display: flex; gap: 4px; background: var(--white);
+  border-bottom: 2px solid var(--border); padding: 0 32px;
+  overflow-x: auto;
+}
+
+.dash-tab-btn {
+  padding: 16px 24px; background: none; border: none; cursor: pointer;
+  font-size: 0.9rem; font-weight: 500; color: var(--muted); white-space: nowrap;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: color .2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.dash-tab-btn:hover { color: var(--primary); }
+.dash-tab-btn.active { color: var(--primary); border-bottom-color: var(--accent); }
+.dash-tab-btn i { font-size: 1rem; }
+
+/* ── Tab Panels ── */
+.dash-panel { display: none; padding: 32px; }
+.dash-panel.active { display: block; }
+
+.panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+}
+.panel-header h2 { font-size: 1.4rem; color: var(--primary); }
+.panel-header p  { color: var(--muted); font-size: 0.875rem; margin-top: 4px; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: var(--radius); font-size: 0.875rem;
+  font-weight: 600; cursor: pointer; border: none; transition: all .2s;
+}
+.btn-primary { background: var(--primary); color: var(--white); }
+.btn-primary:hover { background: #2c5282; }
+.btn-accent  { background: var(--accent);  color: var(--white); }
+.btn-accent:hover  { background: #b8992f; }
+.btn-danger  { background: var(--danger);  color: var(--white); }
+.btn-danger:hover  { background: #c53030; }
+.btn-success { background: var(--success); color: var(--white); }
+.btn-success:hover { background: #2f855a; }
+.btn-outline {
+  background: transparent; color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+.btn-outline:hover { background: var(--primary); color: var(--white); }
+.btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* ── Section Groups (Fee Vouchers) ── */
+.voucher-section { margin-bottom: 36px; }
+.voucher-section-title {
+  font-size: 1rem; font-weight: 700; color: var(--primary);
+  border-bottom: 2px solid var(--accent); padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+/* ── Voucher / Download Slot Cards ── */
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.slot-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 10px;
+  box-shadow: var(--shadow);
+}
+
+.slot-card-name { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.slot-card-status {
+  font-size: 0.75rem; display: flex; align-items: center; gap: 6px;
+}
+.status-local    { color: var(--muted); }
+.status-supabase { color: var(--success); }
+.status-unavail  { color: var(--danger); }
+
+.slot-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* File input hidden */
+.file-input { display: none; }
+
+/* ── Faculty Table ── */
+.table-wrapper { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+table {
+  width: 100%; border-collapse: collapse; background: var(--white);
+  font-size: 0.875rem;
+}
+thead th {
+  background: var(--primary); color: var(--white); padding: 12px 16px;
+  text-align: left; font-weight: 600; white-space: nowrap;
+}
+tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f7f9fc; }
+
+.badge {
+  display: inline-block; padding: 2px 10px; border-radius: 99px;
+  font-size: 0.7rem; font-weight: 600; text-transform: capitalize;
+}
+.badge-professor { background: #ebf4ff; color: #2b6cb0; }
+.badge-assistant { background: #f0fff4; color: #276749; }
+.badge-lecturer  { background: #fffbeb; color: #92400e; }
+
+/* ── Applications Table ── */
+.apps-toolbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px; flex-wrap: wrap; gap: 12px;
+}
+.search-box {
+  padding: 9px 14px; border: 1.5px solid var(--border); border-radius: var(--radius);
+  font-size: 0.875rem; width: 260px; max-width: 100%;
+}
+.search-box:focus { outline: none; border-color: var(--primary); }
+
+.app-count { color: var(--muted); font-size: 0.85rem; }
+
+/* ── Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 16px; display: none;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--white); border-radius: 12px; width: 100%; max-width: 580px;
+  max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--white); z-index: 1;
+}
+.modal-header h3 { font-size: 1.1rem; color: var(--primary); }
+.modal-close {
+  background: none; border: none; font-size: 1.4rem; cursor: pointer;
+  color: var(--muted); line-height: 1;
+}
+.modal-body { padding: 24px; }
+.modal-footer {
+  padding: 16px 24px; border-top: 1px solid var(--border);
+  display: flex; gap: 10px; justify-content: flex-end;
+}
+
+/* Modal form fields */
+.mform-group { margin-bottom: 16px; }
+.mform-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; }
+.mform-group input,
+.mform-group select,
+.mform-group textarea {
+  width: 100%; padding: 9px 13px; border: 1.5px solid var(--border);
+  border-radius: var(--radius); font-size: 0.875rem; transition: border-color .2s;
+  font-family: inherit;
+}
+.mform-group input:focus,
+.mform-group select:focus,
+.mform-group textarea:focus { outline: none; border-color: var(--primary); }
+.mform-group textarea { min-height: 80px; resize: vertical; }
+.mform-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* Application detail modal */
+.app-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+.app-detail-item label { font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+.app-detail-item p { font-size: 0.875rem; color: var(--text); margin-top: 2px; }
+.app-detail-section { margin-bottom: 20px; }
+.app-detail-section h4 {
+  font-size: 0.85rem; font-weight: 700; color: var(--primary);
+  border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 12px;
+}
+
+/* ── Toast notifications ── */
+#toast-container {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  padding: 12px 20px; border-radius: var(--radius); color: var(--white);
+  font-size: 0.875rem; font-weight: 500; box-shadow: var(--shadow-lg);
+  animation: slideIn .3s ease; min-width: 240px;
+}
+.toast.success { background: var(--success); }
+.toast.error   { background: var(--danger); }
+.toast.info    { background: var(--primary); }
+@keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* ── Loader ── */
+.spinner {
+  display: inline-block; width: 18px; height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.35); border-top-color: #fff;
+  border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-state {
+  text-align: center; padding: 48px; color: var(--muted);
+}
+.loading-state i { font-size: 2rem; margin-bottom: 12px; display: block; }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center; padding: 64px 24px; color: var(--muted);
+}
+.empty-state i { font-size: 3rem; margin-bottom: 16px; display: block; color: var(--border); }
+.empty-state h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--text); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .admin-header { padding: 0 16px; }
+  .admin-header-left h1 { font-size: 0.95rem; }
+  .dash-tabs { padding: 0 16px; }
+  .dash-panel { padding: 20px 16px; }
+  .mform-row { grid-template-columns: 1fr; }
+  .app-detail-grid { grid-template-columns: 1fr; }
+  .slot-grid { grid-template-columns: 1fr; }
+  table { font-size: 0.8rem; }
+  .modal { max-width: 100%; margin: 0; border-radius: 12px 12px 0 0; align-self: flex-end; }
+}

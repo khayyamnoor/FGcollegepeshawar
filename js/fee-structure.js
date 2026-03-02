@@ -1,5 +1,36 @@
+// ── Apply Supabase fee-voucher overrides ──────────────────────────────────────
+// Fetches uploaded PDFs from Supabase and updates card hrefs.
+// Cards without an override keep their original local file path.
+async function applyFeeOverrides() {
+  try {
+    const { data } = await _supabase.from('fee_vouchers').select('slot_key, storage_path')
+    if (!data || data.length === 0) return
+
+    data.forEach(({ slot_key, storage_path }) => {
+      const card = document.querySelector(`[data-slot="${slot_key}"]`)
+      if (!card) return
+
+      const url = `${SUPABASE_URL}/storage/v1/object/public/fee-vouchers/${storage_path}`
+
+      if (card.tagName === 'A') {
+        card.href = url
+      } else {
+        // Was an unavailable div — upgrade it to a clickable link
+        const a = document.createElement('a')
+        a.href      = url
+        a.target    = '_blank'
+        a.className = card.className.replace('unavailable', '').trim()
+        a.dataset.slot = slot_key
+        a.innerHTML = card.innerHTML.replace(/<span class="unavailable-badge">.*?<\/span>/i, '')
+        card.parentNode.replaceChild(a, card)
+      }
+    })
+  } catch (_) { /* fail silently — local paths remain */ }
+}
+
 // Wait for the DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", () => {
+  applyFeeOverrides()
   // Tab functionality
   const tabButtons = document.querySelectorAll(".tab-btn")
   const tabContents = document.querySelectorAll(".tab-content")

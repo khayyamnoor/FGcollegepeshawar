@@ -360,8 +360,37 @@
   </button>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/faculty.js"></script>
+  <script>
+    // Load faculty from Supabase — replaces static cards if records exist
+    (async () => {
+      try {
+        const { data } = await _supabase.from('faculty').select('*').order('sort_order').order('name')
+        if (!data || !data.length) return   // keep static HTML as fallback
+
+        const grid = document.querySelector('.faculty-grid')
+        if (!grid) return
+
+        grid.innerHTML = data.map(f => `
+          <div class="faculty-card" data-category="${f.category}">
+            <div class="faculty-info">
+              <h3>${f.name}</h3>
+              ${f.level        ? `<p class="faculty-discipline"><strong>Level:</strong> ${f.level}</p>` : ''}
+              ${f.discipline   ? `<p class="faculty-subject"><strong>Discipline:</strong> ${f.discipline}</p>` : ''}
+              ${f.designation  ? `<p class="faculty-designation"><strong>Designation:</strong> ${f.designation}</p>` : ''}
+              ${f.qualification? `<p class="faculty-qualification"><strong>Qualification:</strong> ${f.qualification}</p>` : ''}
+            </div>
+          </div>`).join('')
+
+        // Re-trigger active filter so buttons work on freshly rendered cards
+        const activeFilter = document.querySelector('.filter-btn.active')
+        if (activeFilter) activeFilter.click()
+      } catch (_) {}   // fail silently — static HTML remains as fallback
+    })()
+  </script>
 </body>
 </html>

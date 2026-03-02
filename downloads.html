@@ -73,65 +73,53 @@
       </div>
       
       <div class="downloads-grid">
-        <a href="files/Reference Letter.pdf" class="download-card" target="_blank">
-          <div class="download-icon">
-            <i class="fas fa-file-pdf"></i>
-          </div>
+        <a href="files/Reference Letter.pdf" class="download-card" target="_blank" data-slot="dl-reference-letter">
+          <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="download-info">
             <h4>Reference Letter</h4>
             <p>Official reference letter format for students</p>
             <span class="download-btn">Download <i class="fas fa-download"></i></span>
           </div>
         </a>
-        
-        <a href="files/English Proficiency Certificate.pdf" class="download-card" target="_blank">
-          <div class="download-icon">
-            <i class="fas fa-file-pdf"></i>
-          </div>
+
+        <a href="files/English Proficiency Certificate.pdf" class="download-card" target="_blank" data-slot="dl-english-proficiency">
+          <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="download-info">
             <h4>English Proficiency Certificate</h4>
             <p>Certificate of English language proficiency</p>
             <span class="download-btn">Download <i class="fas fa-download"></i></span>
           </div>
         </a>
-        
-        <a href="files/Character Certificate.pdf" class="download-card" target="_blank">
-          <div class="download-icon">
-            <i class="fas fa-file-pdf"></i>
-          </div>
+
+        <a href="files/Character Certificate.pdf" class="download-card" target="_blank" data-slot="dl-character-cert">
+          <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="download-info">
             <h4>Character Certificate</h4>
             <p>Official character certificate for students</p>
             <span class="download-btn">Download <i class="fas fa-download"></i></span>
           </div>
         </a>
-        
-        <a href="files/Hope Certificate.pdf" class="download-card" target="_blank">
-          <div class="download-icon">
-            <i class="fas fa-file-pdf"></i>
-          </div>
+
+        <a href="files/Hope Certificate.pdf" class="download-card" target="_blank" data-slot="dl-hope-cert">
+          <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="download-info">
             <h4>Hope Certificate</h4>
             <p>Certificate of hope for continuing students</p>
             <span class="download-btn">Download <i class="fas fa-download"></i></span>
           </div>
         </a>
-        
-        <a href="files/Clearance Certificate.pdf" class="download-card" target="_blank">
-          <div class="download-icon">
-            <i class="fas fa-file-pdf"></i>
-          </div>
+
+        <a href="files/Clearance Certificate.pdf" class="download-card" target="_blank" data-slot="dl-clearance-cert">
+          <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="download-info">
             <h4>Student Clearance Certificate</h4>
             <p>Clearance certificate for graduating students</p>
             <span class="download-btn">Download <i class="fas fa-download"></i></span>
           </div>
         </a>
-        
-        <a href="files/Degree Form UOP.pdf" class="download-card" target="_blank">
-          <div class="download-icon">
-            <i class="fas fa-file-pdf"></i>
-          </div>
+
+        <a href="files/Degree Form UOP.pdf" class="download-card" target="_blank" data-slot="dl-degree-form-uop">
+          <div class="download-icon"><i class="fas fa-file-pdf"></i></div>
           <div class="download-info">
             <h4>Degree Form UOP</h4>
             <p>University of Peshawar degree application form</p>
@@ -187,7 +175,22 @@
   </button>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
+  <script>
+    // Apply Supabase download overrides on page load
+    (async () => {
+      try {
+        const { data } = await _supabase.from('downloads').select('slot_key, storage_path')
+        if (!data || !data.length) return
+        data.forEach(({ slot_key, storage_path }) => {
+          const card = document.querySelector(`[data-slot="${slot_key}"]`)
+          if (card) card.href = `${SUPABASE_URL}/storage/v1/object/public/downloads/${storage_path}`
+        })
+      } catch (_) {}
+    })()
+  </script>
 </body>
 </html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — FG College Peshawar</title>
+  <link rel="icon" href="img/logo.png" type="image/png">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ═══════════════════════════════ LOGIN SCREEN ══════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <img src="img/logo.png" alt="FG College Logo">
+    <h2>Admin Panel</h2>
+    <p>FG Degree College for Men, Peshawar Cantt</p>
+
+    <div id="login-error"></div>
+
+    <div class="form-group">
+      <label for="admin-email">Email</label>
+      <input type="email" id="admin-email" placeholder="admin@fgcollege.edu.pk" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label for="admin-password">Password</label>
+      <input type="password" id="admin-password" placeholder="••••••••••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">
+      Sign In
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ DASHBOARD ══════════════════════════════════ -->
+<div id="dashboard">
+
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <img src="img/logo.png" alt="Logo">
+      <div>
+        <h1>Admin Dashboard</h1>
+        <span id="admin-email-display"></span>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+  </header>
+
+  <!-- Tabs -->
+  <div class="dash-tabs">
+    <button class="dash-tab-btn active" data-panel="fee-vouchers">
+      <i class="fas fa-file-invoice-dollar"></i> Fee Vouchers
+    </button>
+    <button class="dash-tab-btn" data-panel="downloads">
+      <i class="fas fa-download"></i> Downloads
+    </button>
+    <button class="dash-tab-btn" data-panel="faculty">
+      <i class="fas fa-chalkboard-teacher"></i> Faculty
+    </button>
+    <button class="dash-tab-btn" data-panel="applications">
+      <i class="fas fa-clipboard-list"></i> Applications
+    </button>
+  </div>
+
+  <!-- ── FEE VOUCHERS PANEL ────────────────────────────────────────────────── -->
+  <div class="dash-panel active" id="panel-fee-vouchers">
+    <div class="panel-header">
+      <div>
+        <h2>Fee Vouchers</h2>
+        <p>Upload or replace PDF vouchers. Changes appear live on the public site immediately.</p>
+      </div>
+    </div>
+
+    <!-- Intermediate – Civilians -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">Intermediate — Civilians</div>
+      <div class="slot-grid" id="slots-inter-civ"></div>
+    </div>
+
+    <!-- Intermediate – FGEI Employees -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">Intermediate — FGEI Employees</div>
+      <div class="slot-grid" id="slots-inter-fgei"></div>
+    </div>
+
+    <!-- BS NUP -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">BS Programs — NUP</div>
+      <div class="slot-grid" id="slots-nup"></div>
+    </div>
+
+    <!-- BS UOP CS -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">BS Programs — UOP / Computer Science</div>
+      <div class="slot-grid" id="slots-uop-cs"></div>
+    </div>
+
+    <!-- BS UOP English -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">BS Programs — UOP / English</div>
+      <div class="slot-grid" id="slots-uop-eng"></div>
+    </div>
+
+    <!-- BS UOP Pol Sci -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">BS Programs — UOP / Political Science</div>
+      <div class="slot-grid" id="slots-uop-polsci"></div>
+    </div>
+
+    <!-- BS UOP BBA -->
+    <div class="voucher-section">
+      <div class="voucher-section-title">BS Programs — UOP / BBA (Hons)</div>
+      <div class="slot-grid" id="slots-uop-bba"></div>
+    </div>
+  </div>
+
+  <!-- ── DOWNLOADS PANEL ───────────────────────────────────────────────────── -->
+  <div class="dash-panel" id="panel-downloads">
+    <div class="panel-header">
+      <div>
+        <h2>Downloads</h2>
+        <p>Replace certificate PDFs available on the Downloads page.</p>
+      </div>
+    </div>
+    <div class="slot-grid" id="slots-downloads"></div>
+  </div>
+
+  <!-- ── FACULTY PANEL ─────────────────────────────────────────────────────── -->
+  <div class="dash-panel" id="panel-faculty">
+    <div class="panel-header">
+      <div>
+        <h2>Faculty</h2>
+        <p>Add, edit, or remove faculty members shown on the Faculty page.</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-outline" onclick="seedFaculty()">
+          <i class="fas fa-database"></i> Seed from Current Data
+        </button>
+        <button class="btn btn-primary" onclick="openFacultyModal()">
+          <i class="fas fa-plus"></i> Add Member
+        </button>
+      </div>
+    </div>
+    <div class="table-wrapper">
+      <table id="faculty-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Category</th>
+            <th>Discipline</th>
+            <th>Qualification</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="faculty-tbody">
+          <tr><td colspan="7" class="loading-state"><i class="fas fa-spinner fa-spin"></i> Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── APPLICATIONS PANEL ────────────────────────────────────────────────── -->
+  <div class="dash-panel" id="panel-applications">
+    <div class="panel-header">
+      <div>
+        <h2>Applications</h2>
+        <p>All admission form submissions from prospective students.</p>
+      </div>
+      <button class="btn btn-success" onclick="exportCSV()">
+        <i class="fas fa-file-csv"></i> Export CSV
+      </button>
+    </div>
+    <div class="apps-toolbar">
+      <input class="search-box" type="search" id="app-search" placeholder="Search by name, email, phone…" oninput="filterApps()">
+      <span class="app-count" id="app-count"></span>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Father's Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Program</th>
+            <th>Choice</th>
+            <th>Submitted</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="apps-tbody">
+          <tr><td colspan="9" class="loading-state"><i class="fas fa-spinner fa-spin"></i> Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /#dashboard -->
+
+<!-- ═══════════════════════════════ MODALS ═════════════════════════════════════ -->
+
+<!-- Faculty Modal -->
+<div class="modal-overlay" id="faculty-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="faculty-modal-title">Add Faculty Member</h3>
+      <button class="modal-close" onclick="closeFacultyModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="faculty-id">
+      <div class="mform-row">
+        <div class="mform-group">
+          <label>Full Name *</label>
+          <input type="text" id="f-name" placeholder="Mr. / Dr. …">
+        </div>
+        <div class="mform-group">
+          <label>Category *</label>
+          <select id="f-category">
+            <option value="professor">Associate Professor</option>
+            <option value="assistant">Assistant Professor</option>
+            <option value="lecturer">Lecturer</option>
+          </select>
+        </div>
+      </div>
+      <div class="mform-row">
+        <div class="mform-group">
+          <label>Designation</label>
+          <input type="text" id="f-designation" placeholder="e.g. Lecturer">
+        </div>
+        <div class="mform-group">
+          <label>Discipline / Subject</label>
+          <input type="text" id="f-discipline" placeholder="e.g. Computer Science">
+        </div>
+      </div>
+      <div class="mform-row">
+        <div class="mform-group">
+          <label>Level</label>
+          <input type="text" id="f-level" placeholder="e.g. BS Programs">
+        </div>
+        <div class="mform-group">
+          <label>Qualification</label>
+          <input type="text" id="f-qualification" placeholder="e.g. M.Phil">
+        </div>
+      </div>
+      <div class="mform-group">
+        <label>Sort Order (lower = first)</label>
+        <input type="number" id="f-sort" value="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeFacultyModal()">Cancel</button>
+      <button class="btn btn-primary" id="faculty-save-btn" onclick="saveFaculty()">
+        <i class="fas fa-save"></i> Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Application Detail Modal -->
+<div class="modal-overlay" id="app-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Application Details</h3>
+      <button class="modal-close" onclick="closeAppModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="app-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="app-delete-btn" onclick="deleteApp()">
+        <i class="fas fa-trash"></i> Delete
+      </button>
+      <button class="btn btn-outline" onclick="closeAppModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<!-- ── Scripts ─────────────────────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

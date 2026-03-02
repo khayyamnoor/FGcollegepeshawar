@@ -556,72 +556,53 @@ document.addEventListener("DOMContentLoaded", () => {
     return data
   }
 
-  // Submit to Excel sheet
+  // Submit form data to Supabase admissions table
   async function submitToExcel(formData) {
-    // Google Apps Script URL - Replace with your actual URL
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbygIQu6hmQQ8u_cWi4EFCl0uTiemaA3DPBEmX96I1QsVM9hjkl2S95UtL_OilYGM19jYg/exec"
-    
-    try {
-      const response = await fetch(scriptUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      })
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const result = await response.json()
-      return result
-      
-    } catch (error) {
-      // Fallback to alternative methods
-      console.log("Primary method failed, trying fallback...")
-      return await submitToExcelFallback(formData)
-    }
-  }
+    const refNum = generateReferenceNumber()
 
-  // Fallback submission methods
-  async function submitToExcelFallback(formData) {
-    // Method 1: Try Formspree
-    try {
-      const formspreeResponse = await fetch('https://formspree.io/f/YOUR_FORMSPREE_ID', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      })
-      
-      if (formspreeResponse.ok) {
-        return { success: true, message: "Submitted via Formspree", referenceNumber: generateReferenceNumber() }
-      }
-    } catch (error) {
-      console.log("Formspree failed, trying local storage...")
+    const payload = {
+      reference_number:  refNum,
+      full_name:         formData.fullName        || null,
+      father_name:       formData.fatherName      || null,
+      dob:               formData.dob             || null,
+      gender:            formData.gender          || null,
+      cnic:              formData.cnic            || null,
+      nationality:       formData.nationality     || null,
+      religion:          formData.religion        || null,
+      domicile:          formData.domicile        || null,
+      any_disability:    formData.anyDisability === 'on',
+      address:           formData.address         || null,
+      phone:             formData.phone           || null,
+      email:             formData.email           || null,
+      guardian_phone:    formData.guardianPhone   || null,
+      emergency_contact: formData.emergencyContact|| null,
+      matric_board:      formData.matricBoard     || null,
+      matric_year:       formData.matricYear      || null,
+      matric_roll_no:    formData.matricRollNo    || null,
+      matric_institute:  formData.matricInstitute || null,
+      matric_total:      formData.matricTotal     ? parseInt(formData.matricTotal)   : null,
+      matric_obtained:   formData.matricObtained  ? parseInt(formData.matricObtained): null,
+      matric_percentage: formData.matricPercentage|| null,
+      inter_board:       formData.interBoard      || null,
+      inter_year:        formData.interYear       || null,
+      inter_roll_no:     formData.interRollNo     || null,
+      inter_institute:   formData.interInstitute  || null,
+      inter_total:       formData.interTotal      ? parseInt(formData.interTotal)    : null,
+      inter_obtained:    formData.interObtained   ? parseInt(formData.interObtained) : null,
+      inter_percentage:  formData.interPercentage || null,
+      program_level:     formData.programLevel    || null,
+      program_choice:    formData.programChoice   || null,
+      program_reason:    formData.programReason   || null,
+      blood_group:       formData.bloodGroup      || null,
+      hafiz_quran:       formData.hafizQuran      || null,
+      disability:        formData.disability      || null,
+      medical_condition: formData.medicalCondition|| null,
     }
-    
-    // Method 2: Store in localStorage as backup
-    try {
-      const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]')
-      const submission = {
-        ...formData,
-        id: generateReferenceNumber(),
-        timestamp: new Date().toISOString()
-      }
-      submissions.push(submission)
-      localStorage.setItem('formSubmissions', JSON.stringify(submissions))
-      
-      return { 
-        success: true, 
-        message: "Data saved locally (offline mode)", 
-        referenceNumber: submission.id 
-      }
-    } catch (error) {
-      throw new Error("All submission methods failed")
-    }
+
+    const { error } = await _supabase.from('admissions').insert(payload)
+
+    if (error) throw new Error(error.message)
+    return { success: true, referenceNumber: refNum }
   }
 
   // Generate reference number
