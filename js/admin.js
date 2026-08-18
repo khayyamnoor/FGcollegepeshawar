@@ -174,6 +174,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 // ─── Dashboard init ───────────────────────────────────────────────────────────
 function initDashboard() {
+  loadAnnouncement()
   loadFeeOverrides()
   loadFaculty()
   loadApplications()
@@ -192,6 +193,159 @@ function toast(msg, type = 'success') {
 // ─── Supabase Storage URL helper ──────────────────────────────────────────────
 function storageUrl(bucket, path) {
   return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ANNOUNCEMENT BANNER
+// ══════════════════════════════════════════════════════════════════════════════
+const ANN_KEY        = 'main'
+const ANN_BUCKET     = 'announcements'
+const ANN_PDF_PATH   = 'announcement.pdf'
+
+// Holds the storage path of an uploaded PDF until "Save Changes" persists it.
+let annPdfPath = null
+let annPdfTs   = Date.now()
+
+async function loadAnnouncement() {
+  const { data, error } = await sb.from('announcement').select('*').eq('slot_key', ANN_KEY).maybeSingle()
+
+  if (error) {
+    toast(`Could not load announcement: ${error.message}`, 'error')
+    return
+  }
+
+  const a = data || {}
+  annPdfPath = a.storage_path || null
+  annPdfTs   = a.updated_at ? new Date(a.updated_at).getTime() : Date.now()
+
+  document.getElementById('a-visible').checked   = a.is_visible !== false
+  document.getElementById('a-label').value       = a.label ?? 'Announcement:'
+  document.getElementById('a-message').value     = a.message ?? ''
+  document.getElementById('a-button-text').value = a.button_text ?? 'Apply Now'
+  document.getElementById('a-button-link').value = a.button_link ?? ''
+
+  const type = a.link_type === 'pdf' ? 'pdf' : 'url'
+  document.querySelector(`input[name="a-link-type"][value="${type}"]`).checked = true
+
+  document.getElementById('a-saved-at').textContent =
+    a.updated_at ? `Last saved ${new Date(a.updated_at).toLocaleString('en-PK')}` : ''
+
+  onLinkTypeChange()
+  renderAnnPdfStatus()
+}
+
+function annLinkType() {
+  return document.querySelector('input[name="a-link-type"]:checked').value
+}
+
+function onLinkTypeChange() {
+  const isPdf = annLinkType() === 'pdf'
+  document.getElementById('a-url-group').style.display = isPdf ? 'none' : ''
+  document.getElementById('a-pdf-group').style.display = isPdf ? '' : 'none'
+  renderAnnPreview()
+}
+
+function renderAnnPdfStatus() {
+  const statusEl = document.getElementById('a-pdf-status')
+  const viewEl   = document.getElementById('a-pdf-view')
+  const btnText  = document.getElementById('a-pdf-btn-text')
+
+  if (annPdfPath) {
+    statusEl.className   = 'ann-pdf-status has-file'
+    statusEl.innerHTML   = '<i class="fas fa-check-circle"></i> PDF uploaded.'
+    btnText.textContent  = 'Replace PDF'
+    viewEl.href          = `${storageUrl(ANN_BUCKET, annPdfPath)}?t=${annPdfTs}`
+    viewEl.style.display = ''
+  } else {
+    statusEl.className   = 'ann-pdf-status'
+    statusEl.innerHTML   = '<i class="fas fa-circle-info"></i> No PDF uploaded yet.'
+    btnText.textContent  = 'Upload PDF'
+    viewEl.style.display = 'none'
+  }
+}
+
+function renderAnnPreview() {
+  const visible = document.getElementById('a-visible').checked
+  const label   = document.getElementById('a-label').value.trim()
+  const message = document.getElementById('a-message').value.trim()
+  const btnText = document.getElementById('a-button-text').value.trim()
+
+  const labelEl = document.getElementById('prev-label')
+  labelEl.textContent   = label
+  labelEl.style.display = label ? '' : 'none'
+
+  document.getElementById('prev-message').textContent = message || 'Your announcement message will appear here…'
+
+  const btnEl = document.getElementById('prev-btn')
+  btnEl.textContent   = btnText
+  btnEl.style.display = btnText ? '' : 'none'
+
+  document.getElementById('ann-preview').classList.toggle('is-hidden', !visible)
+  document.getElementById('ann-hidden-note').classList.toggle('show', !visible)
+}
+
+async function uploadAnnouncementPdf(input) {
+  const file = input.files[0]
+  if (!file) return
+
+  const statusEl = document.getElementById('a-pdf-status')
+  statusEl.className = 'ann-pdf-status'
+  statusEl.innerHTML = '<span class="spinner" style="border-color:rgba(26,58,92,.3);border-top-color:#1a3a5c;"></span> Uploading…'
+
+  const { error } = await sb.storage.from(ANN_BUCKET).upload(ANN_PDF_PATH, file, { upsert: true })
+  input.value = ''
+
+  if (error) {
+    toast(`Upload failed: ${error.message}`, 'error')
+    renderAnnPdfStatus()
+    return
+  }
+
+  annPdfPath = ANN_PDF_PATH
+  annPdfTs   = Date.now()
+  renderAnnPdfStatus()
+  toast('PDF uploaded — click "Save Changes" to put it live.', 'info')
+}
+
+async function saveAnnouncement() {
+  const message  = document.getElementById('a-message').value.trim()
+  const linkType = annLinkType()
+  const link     = document.getElementById('a-button-link').value.trim()
+  const btnText  = document.getElementById('a-button-text').value.trim()
+
+  if (!message) { toast('Message is required.', 'error'); return }
+  if (btnText && linkType === 'url' && !link) {
+    toast('Add a link for the button, or clear the button text to hide it.', 'error'); return
+  }
+  if (btnText && linkType === 'pdf' && !annPdfPath) {
+    toast('Upload a PDF first, or clear the button text to hide the button.', 'error'); return
+  }
+
+  const payload = {
+    slot_key:     ANN_KEY,
+    is_visible:   document.getElementById('a-visible').checked,
+    label:        document.getElementById('a-label').value.trim(),
+    message,
+    button_text:  btnText,
+    link_type:    linkType,
+    button_link:  link,
+    storage_path: annPdfPath,
+    updated_at:   new Date().toISOString(),
+  }
+
+  const btn = document.getElementById('a-save-btn')
+  btn.innerHTML = '<span class="spinner"></span> Saving…'
+  btn.disabled  = true
+
+  const { error } = await sb.from('announcement').upsert(payload, { onConflict: 'slot_key' })
+
+  btn.innerHTML = '<i class="fas fa-save"></i> Save Changes'
+  btn.disabled  = false
+
+  if (error) { toast(`Save failed: ${error.message}`, 'error'); return }
+
+  toast('Announcement updated — it is live on the homepage now!')
+  loadAnnouncement()
 }
 
 // ══════════════════════════════════════════════════════════════════════════════

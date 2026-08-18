@@ -89,6 +89,26 @@ CREATE TABLE IF NOT EXISTS downloads (
   updated_at   timestamptz DEFAULT now()
 );
 
+-- 6. ANNOUNCEMENT BANNER TABLE (single row, keyed by slot_key = 'main')
+-- Drives the banner on index.html: text, button label, and its link —
+-- which is either an external URL or a PDF uploaded to the 'announcements' bucket.
+CREATE TABLE IF NOT EXISTS announcement (
+  id           uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  slot_key     text UNIQUE NOT NULL DEFAULT 'main',
+  is_visible   boolean DEFAULT true,
+  label        text    DEFAULT 'Announcement:',
+  message      text    DEFAULT '',
+  button_text  text    DEFAULT 'Apply Now',
+  link_type    text    DEFAULT 'url' CHECK (link_type IN ('url','pdf')),
+  button_link  text    DEFAULT 'form.html',
+  storage_path text,
+  updated_at   timestamptz DEFAULT now()
+);
+
+INSERT INTO announcement (slot_key, message)
+VALUES ('main', 'Admissions open for Fall 2025 semester. Last date to apply is August 15, 2025.')
+ON CONFLICT (slot_key) DO NOTHING;
+
 -- ─── ROW LEVEL SECURITY ──────────────────────────────────────────────────────
 
 ALTER TABLE admissions       ENABLE ROW LEVEL SECURITY;
@@ -96,6 +116,7 @@ ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faculty          ENABLE ROW LEVEL SECURITY;
 ALTER TABLE fee_vouchers     ENABLE ROW LEVEL SECURITY;
 ALTER TABLE downloads        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE announcement     ENABLE ROW LEVEL SECURITY;
 
 -- admissions: anyone can INSERT, only authenticated admin can SELECT/DELETE
 CREATE POLICY "public_insert_admissions"
@@ -141,12 +162,20 @@ CREATE POLICY "public_read_downloads"
 CREATE POLICY "admin_all_downloads"
   ON downloads FOR ALL USING (auth.role() = 'authenticated');
 
+-- announcement: anyone can SELECT, authenticated admin can do everything
+CREATE POLICY "public_read_announcement"
+  ON announcement FOR SELECT USING (true);
+
+CREATE POLICY "admin_all_announcement"
+  ON announcement FOR ALL USING (auth.role() = 'authenticated');
+
 -- ─── STORAGE BUCKETS ─────────────────────────────────────────────────────────
 -- Run these separately in Supabase Dashboard > Storage > New Bucket
 -- OR uncomment and run here:
 
 -- INSERT INTO storage.buckets (id, name, public) VALUES ('fee-vouchers', 'fee-vouchers', true);
 -- INSERT INTO storage.buckets (id, name, public) VALUES ('downloads', 'downloads', true);
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('announcements', 'announcements', true);
 
 -- Storage policies (run after creating buckets):
 

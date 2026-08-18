@@ -51,7 +51,10 @@
 
   <!-- Tabs -->
   <div class="dash-tabs">
-    <button class="dash-tab-btn active" data-panel="fee-vouchers">
+    <button class="dash-tab-btn active" data-panel="announcement">
+      <i class="fas fa-bullhorn"></i> Announcement
+    </button>
+    <button class="dash-tab-btn" data-panel="fee-vouchers">
       <i class="fas fa-file-invoice-dollar"></i> Fee Vouchers
     </button>
     <button class="dash-tab-btn" data-panel="downloads">
@@ -68,8 +71,104 @@
     </button>
   </div>
 
+  <!-- ── ANNOUNCEMENT PANEL ────────────────────────────────────────────────── -->
+  <div class="dash-panel active" id="panel-announcement">
+    <div class="panel-header">
+      <div>
+        <h2>Announcement Banner</h2>
+        <p>The yellow bar on the homepage. Changes appear live immediately after saving.</p>
+      </div>
+      <label class="toggle-row" for="a-visible">
+        <input type="checkbox" id="a-visible" checked onchange="renderAnnPreview()">
+        <span>Show banner on homepage</span>
+      </label>
+    </div>
+
+    <!-- Live preview -->
+    <div class="ann-preview-wrap">
+      <div class="ann-preview-caption">Live preview</div>
+      <div class="ann-preview" id="ann-preview">
+        <i class="fas fa-bullhorn"></i>
+        <div class="ann-preview-text">
+          <span class="ann-preview-label" id="prev-label">Announcement:</span>
+          <span class="ann-preview-message" id="prev-message"></span>
+        </div>
+        <span class="ann-preview-btn" id="prev-btn">Apply Now</span>
+      </div>
+      <div class="ann-preview-hidden-note" id="ann-hidden-note">
+        <i class="fas fa-eye-slash"></i> Banner is hidden — visitors will not see it.
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <div class="ann-form">
+      <div class="mform-row">
+        <div class="mform-group">
+          <label>Label <span class="hint">the bold bit before the message</span></label>
+          <input type="text" id="a-label" placeholder="Announcement:" oninput="renderAnnPreview()">
+        </div>
+        <div class="mform-group">
+          <label>Button Text</label>
+          <input type="text" id="a-button-text" placeholder="Apply Now" oninput="renderAnnPreview()">
+        </div>
+      </div>
+
+      <div class="mform-group">
+        <label>Message *</label>
+        <textarea id="a-message" rows="2" placeholder="e.g. Admissions open for Spring 2026. Last date to apply is 15 September." oninput="renderAnnPreview()"></textarea>
+      </div>
+
+      <div class="mform-group">
+        <label>Where should the button go?</label>
+        <div class="link-type-choice">
+          <label class="link-type-opt">
+            <input type="radio" name="a-link-type" value="url" checked onchange="onLinkTypeChange()">
+            <span><i class="fas fa-link"></i> A page or web link</span>
+          </label>
+          <label class="link-type-opt">
+            <input type="radio" name="a-link-type" value="pdf" onchange="onLinkTypeChange()">
+            <span><i class="fas fa-file-pdf"></i> A PDF file I upload</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- URL mode -->
+      <div class="mform-group" id="a-url-group">
+        <label>Link <span class="hint">a page on this site (e.g. <code>form.html</code>) or a full address (e.g. <code>https://…</code>)</span></label>
+        <input type="text" id="a-button-link" placeholder="form.html" oninput="renderAnnPreview()">
+      </div>
+
+      <!-- PDF mode -->
+      <div class="mform-group" id="a-pdf-group" style="display:none">
+        <label>PDF File</label>
+        <div class="ann-pdf-box">
+          <div class="ann-pdf-status" id="a-pdf-status">
+            <i class="fas fa-circle-info"></i> No PDF uploaded yet.
+          </div>
+          <div class="ann-pdf-actions">
+            <label class="btn btn-primary btn-sm" for="a-pdf-file">
+              <i class="fas fa-upload"></i> <span id="a-pdf-btn-text">Upload PDF</span>
+            </label>
+            <input class="file-input" type="file" id="a-pdf-file" accept=".pdf" onchange="uploadAnnouncementPdf(this)">
+            <a class="btn btn-outline btn-sm" id="a-pdf-view" href="#" target="_blank" style="display:none">
+              <i class="fas fa-eye"></i> View
+            </a>
+          </div>
+          <p class="ann-pdf-note">Clicking the button will open this PDF in a new tab.</p>
+        </div>
+      </div>
+
+      <div class="ann-form-footer">
+        <span class="ann-saved-at" id="a-saved-at"></span>
+        <button class="btn btn-primary" id="a-save-btn" onclick="saveAnnouncement()">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── FEE VOUCHERS PANEL ────────────────────────────────────────────────── -->
-  <div class="dash-panel active" id="panel-fee-vouchers">
+  <div class="dash-panel" id="panel-fee-vouchers">
     <div class="panel-header">
       <div>
         <h2>Fee Vouchers</h2>

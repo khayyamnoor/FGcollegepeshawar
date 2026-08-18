@@ -75,15 +75,17 @@
   </section>
 
   <!-- Announcement Banner -->
-  <div class="announcement-banner">
+  <!-- Content below is the fallback; js/announcement.js overrides it from Supabase
+       (managed in the admin panel). If Supabase is unreachable, this text stands. -->
+  <div class="announcement-banner" id="announcement-banner">
     <div class="container">
       <div class="announcement-content">
         <i class="fas fa-bullhorn"></i>
         <div class="announcement-text">
-          <span class="announcement-label">Announcement:</span>
-          <span class="announcement-message">Admissions open for Fall 2025 semester. Last date to apply is August 15, 2025.</span>
+          <span class="announcement-label" id="announcement-label">Announcement:</span>
+          <span class="announcement-message" id="announcement-message">Admissions open for Fall 2025 semester. Last date to apply is August 15, 2025.</span>
         </div>
-        <a href="form.html" class="announcement-btn">Apply Now</a>
+        <a href="form.html" class="announcement-btn" id="announcement-btn">Apply Now</a>
       </div>
     </div>
   </div>
@@ -445,8 +447,11 @@
   </button>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
   <script src="js/main.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/index.js"></script>
+  <script src="js/announcement.js"></script>
 </body>
 </html>
